@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Age Calculator</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        font-size: 16px;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: linear-gradient(45deg, #4070f4, #0b8c4c);
+        font-family: "Lato", sans-serif;
+      }
+
+      .wrapper {
+        width: 450px;
+        background-color: #ffffff;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 8px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      }
+      .wrapper h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #4070f4;
+        text-transform: uppercase;
+        text-align: center;
+        border-bottom: 2px inset rgba(0, 0, 0, 0.25);
+        line-height: 2;
+      }
+      .wrapper .input-box {
+        width: 100%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #f0f0f0;
+        margin: 20px 0;
+        border-radius: 8px;
+        padding: 10px;
+        column-gap: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      }
+      .wrapper .input-box input {
+        width: 70%;
+        height: 100%;
+        padding: 0 10px;
+        outline: none;
+        border: none;
+        font-size: 16px;
+        border-radius: 4px 0 0 4px;
+      }
+      .wrapper .input-box button {
+        width: 30%;
+        height: 100%;
+        background-color: #4070f4;
+        color: #ffffff;
+        outline: none;
+        border: none;
+        font-size: 16px;
+        border-radius: 0 4px 4px 0;
+        font-weight: 500;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .wrapper .age-text {
+        text-align: center;
+        font-size: 1rem;
+        color: #555;
+      }
+      .wrapper .instruction-text {
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 2.5;
+        color: #4070f4;
+        font-style: oblique;
+        text-decoration: underline;
+        text-underline-offset: 5px;
+        text-decoration-thickness: 2px;
+        text-decoration-color: #f440f46c;
+        background-color: rgba(0, 0, 0, 0.05);
+        box-shadow: inset 0 2px 10px rgba(4, 0, 255, 0.25),
+          inset 2px 1px 5px rgba(0, 22, 145, 0.26),
+          1px 0 3px rgba(0, 0, 0, 0.35);
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>Age Calculator</h1>
+      <div class="instruction-text">
+        Please select your birthday below and click on the Get Age button
+      </div>
+      <form class="input-box">
+        <input type="date" name="" id="" />
+        <button>Get Age</button>
+      </form>
+      <div class="age-text">
+        Please select your birthday and click on the Get Age button
+      </div>
+    </div>
+    <script>
+      const form = document.querySelector("form");
+      const dateInput = document.querySelector(".input-box input");
+      const btn = document.querySelector(".input-box button");
+      const ageTxt = document.querySelector(".age-text");
+
+      /* Setting Today's date as last date which user can select */
+      dateInput.max = new Date().toISOString().split("T")[0];
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+      });
+
+      function getAge() {
+        if (dateInput.value === "") {
+          ageTxt.textContent = `Please select your birthday!`;
+          ageTxt.style.color = "red";
+        } else {
+          const birthDate = new Date(dateInput.value);
+          const d1 = birthDate.getDate();
+          const m1 = birthDate.getMonth() + 1;
+          const y1 = birthDate.getFullYear();
+
+          const today = new Date();
+          const d2 = today.getDate();
+          const m2 = today.getMonth() + 1;
+          const y2 = today.getFullYear();
+
+          let dResult, mResult, yResult;
+
+          yResult = y2 - y1;
+
+          if (m2 >= m1) {
+            mResult = m2 - m1;
+          } else {
+            mResult = 12 + (m2 - m1);
+            yResult--;
+          }
+
+          if (d2 >= d1) {
+            dResult = d2 - d1;
+          } else {
+            mResult--;
+            dResult = getDayInMonth(y1, m1) + (d1 - d2);
+          }
+
+          if (mResult < 0) {
+            mResult = 11;
+            yResult--;
+          }
+
+          ageTxt.textContent = `Your age is ${yResult} years, ${mResult} months, and ${dResult} days`;
+          ageTxt.style.color = "#555";
+        }
+      }
+
+      function getDayInMonth(year, month) {
+        return new Date(year, month, 0).getDate();
+      }
+      btn.addEventListener("click", getAge);
+    </script>
+  </body>
+</html>
